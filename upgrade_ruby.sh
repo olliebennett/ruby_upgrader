@@ -179,13 +179,15 @@ function update_ruby {
   git -C $1 add Gemfile Gemfile.lock
   git -C $1 commit -m "Upgrade Ruby to $required_ruby_version"
 
-  # Run `gh` command from inside project directory
+  # Push branch to GitHub
+  git -C $1 push --set-upstream origin chore/ruby-$required_ruby_version
+
+  # Return to previously checked out branch
+  git -C $1 checkout -
+
+  # Temporarily move into project directory
   pushd $1
 
-  # Push branch to GitHub
-  git push --set-upstream origin chore/ruby-$required_ruby_version
-
-  # Create PR using GitHub CLI
   echo "Creating PR for $1..."
   gh pr create --title "Upgrade Ruby to $required_ruby_version" --body "Upgrade Ruby from $current_ruby_version to $required_ruby_version - Automated by [Ruby Upgrader](https://github.com/olliebennett/ruby_upgrader/)" --head chore/ruby-$required_ruby_version
 
