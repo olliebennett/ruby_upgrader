@@ -167,6 +167,8 @@ function update_ruby {
 
   update_ruby_version_file $1
 
+  update_docker_ruby_version $1
+
   # run bundler to update Gemfile.lock
   echo "Running bundle install in $1..."
   sleep 2
